@@ -95,7 +95,7 @@ function getPasswordOptions() {
 
   // Validate the length of the password
   while (length < 8 || length > 128 || isNaN(length)) {
-    alert('Please enter a valid number between 8 and 128.'); 
+    alert('Please enter a valid number between 8 and 128.');
     // If incorrect length provided ask again        
     length = parseInt(prompt('Enter the password length (between 8 and 128 characters):'));
   }
@@ -111,19 +111,46 @@ function getPasswordOptions() {
     alert('Please select at least one character type.');
     return getPasswordOptions(); // Call the function again if no character type is selected
   }
+
+  // Return the user requirement as an object with selected options
+  return {
+    length,
+    includeUppercase,
+    includeLowercase,
+    includeNumeric,
+    includeSpecial,
+  };
 }
 
 // Function for getting a random element from an array
 function getRandom(arr) {
-
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
 }
 
 // Function to generate password with user input
 function generatePassword() {
 
   // call the function to get password options and store it in options
-  const options = getPasswordOptions();
+  const passwordOptions = getPasswordOptions();
 
+  // Combine selected characters using concat option
+  const allCharacters = [].concat(
+    passwordOptions.includeUppercase ? upperCasedCharacters : [],
+    passwordOptions.includeLowercase ? lowerCasedCharacters : [],
+    passwordOptions.includeNumeric ? numericCharacters : [],
+    passwordOptions.includeSpecial ? specialCharacters : []
+  );
+
+  // Generate password using selected options and characters
+  let password = '';
+
+  for (let i = 0; i < passwordOptions.length; i++) {
+    const randomChar = getRandom(allCharacters);
+    password += randomChar;
+  }
+
+  return password;
 }
 
 // Get references to the #generate element
@@ -133,6 +160,9 @@ const generateBtn = document.querySelector('#generate');
 function writePassword() {
   const password = generatePassword();
   const passwordText = document.querySelector('#password');
+
+  // displaying the password in the console also
+  console.log('Your password is:\n' + password);
 
   passwordText.value = password;
 }
