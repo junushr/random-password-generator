@@ -90,7 +90,27 @@ const upperCasedCharacters = [
 
 // Function to prompt user for password options
 function getPasswordOptions() {
+  // Ask the user for the length of password
+  let length = parseInt(prompt('Enter the password length (between 8 and 128 characters):'));
 
+  // Validate the length of the password
+  while (length < 8 || length > 128 || isNaN(length)) {
+    alert('Please enter a valid number between 8 and 128.'); 
+    // If incorrect length provided ask again        
+    length = parseInt(prompt('Enter the password length (between 8 and 128 characters):'));
+  }
+
+  // Ask the user for which character types
+  const includeUppercase = confirm('Include uppercase letters?');
+  const includeLowercase = confirm('Include lowercase letters?');
+  const includeNumeric = confirm('Include numbers?');
+  const includeSpecial = confirm('Include special characters?');
+
+  // checking if at least one character type is selected
+  if (!(includeUppercase || includeLowercase || includeNumeric || includeSpecial)) {
+    alert('Please select at least one character type.');
+    return getPasswordOptions(); // Call the function again if no character type is selected
+  }
 }
 
 // Function for getting a random element from an array
@@ -100,6 +120,9 @@ function getRandom(arr) {
 
 // Function to generate password with user input
 function generatePassword() {
+
+  // call the function to get password options and store it in options
+  const options = getPasswordOptions();
 
 }
 
